@@ -1,50 +1,83 @@
 /* eslint-disable vue/require-v-for-key */
 <template>
-  <div>
-    <!-- <v-select
-      v-model="filterState"
-      :items="quality"
-      label="Calidad"
-      dense
-      class="select"
-    ></v-select> -->
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th scope="col">Fechas</th>
-          <th scope="col"
-            v-for="(item, index) in headers"
-            :key="index">
-            {{ item.name }}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(item, idx) in dataTable" :key="idx">
-          <td>{{ item.date }}</td>
-          <td
-            @mouseover="predictionHint = idx"
-            @mouseleave="predictionHint = null">
-            <p :class="getColor(item.hotel)">
-              $ {{ item.hotel }}
-            </p>
-             <span class="predictionHint" v-show="predictionHint === idx">
-              <ul>
-                <li class="title">Puntuación: <strong>4.5</strong></li>
-                <li>200</li>
-                <li>300</li>
-                <li>400</li>
-              </ul>
-            </span>
-          </td>
-          <td>$ {{ item.hotel1 }}</td>
-          <td>$ {{ item.hotel2 }}</td>
-          <td>$ {{ item.hotel3 }}</td>
-          <td>$ {{ item.hotel4 }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+ <v-container fluid>
+  <v-row> 
+    <v-col
+      cols="12"
+      sm="6"
+      md="4"
+    >
+      <v-menu
+        v-model="menu"
+        :close-on-content-click="false"
+        :nudge-right="40"
+        transition="scale-transition"
+        offset-y
+        min-width="290px"
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-text-field
+            v-model="date"
+            label="Seleccionar fechas"
+            prepend-icon="mdi-calendar"
+            readonly
+            v-bind="attrs"
+            v-on="on"
+          ></v-text-field>
+        </template>
+        <v-date-picker
+          v-model="date"
+          range
+          locale="es-co"
+          
+        ></v-date-picker>
+      </v-menu>
+    </v-col>
+  </v-row> 
+     <v-row> 
+        <v-col
+        cols="12"
+        sm="12"
+      >
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">Fechas</th>
+              <th scope="col"
+                v-for="(item, index) in headers"
+                :key="index">
+                {{ item.name }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, idx) in dataTable" :key="idx">
+              <td>{{ item.date }}</td>
+              <td
+                @mouseover="predictionHint = idx"
+                @mouseleave="predictionHint = null">
+                <p :class="getColor(item.hotel)">
+                  $ {{ item.hotel }}
+                </p>
+                <span class="predictionHint" v-show="predictionHint === idx">
+                  <ul>
+                    <li class="title">Puntuación: <strong>4.5</strong></li>
+                    <li>200</li>
+                    <li>300</li>
+                    <li>400</li>
+                  </ul>
+                </span>
+              </td>
+              <td>$ {{ item.hotel1 }}</td>
+              <td>$ {{ item.hotel2 }}</td>
+              <td>$ {{ item.hotel3 }}</td>
+              <td>$ {{ item.hotel4 }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </v-col>
+    </v-row> 
+   </v-container>
 </template>
 <script>
   export default {
@@ -116,7 +149,9 @@
             hotel3: 250,
             hotel4: 200,
           },
-        ]
+        ],
+        date: new Date().toISOString().substr(0, 10),
+        menu: false,
       }
     },
     methods: {

@@ -80,4 +80,31 @@ export default {
 
 <style lang="scss">
 @import '../node_modules/bootstrap/scss/bootstrap.scss';
+.v-card.v-card--flat.v-sheet.theme--light {
+    min-height: calc(100vh - 112px);
+}
+.hint {
+  width: 180px;
+  font-size: 10px;
+  padding: .5rem;
+  background: #2296f3;
+  color: white;
+  border-radius: 4px;
+  font-weight: bold;
+  position: absolute;
+  right: 1rem;
+  top: -5.5rem;
+  &:after {
+    content: "";
+    width: 0;
+    height: 0;
+    border-left: 10px solid #2296f3;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    left: 12px;
+    position: absolute;
+    bottom: -14px;
+    transform: rotate(90deg);
+  }
+}
 </style>

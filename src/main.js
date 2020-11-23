@@ -9,8 +9,13 @@ import store  from './store';
 Vue.use(MultiFiltersPlugin);
 Vue.use(VueAxios, axios);
 
-// Agregamos la URL base de nuestra API
-axios.defaults.baseURL = 'http://localhost:80/wordpress/wordpress';
+window.axios = axios.create({
+  baseURL: 'https://api.airtable.com/',
+  headers: {
+    accept: 'application/json',
+    'Content-type': 'application/json',
+  },
+});
 
 Vue.config.productionTip = false
 
