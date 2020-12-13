@@ -34,6 +34,7 @@
             <v-tab
               v-for="item in items"
               :key="item.tab"
+              @click="test(item.id)"
             >
               {{ item.tab }}
             </v-tab>
@@ -71,10 +72,17 @@ export default {
   data: () => ({
      tab: null,
       items: [
-        { tab: 'Dashboard', content: 'Dashboard' },
-        { tab: 'Administrador', content: 'Admin' }
+        { tab: 'Dashboard', content: 'Dashboard', id: 1 },
+        { tab: 'Administrador', content: 'Admin', id: 2}
       ]
   }),
+  methods: {
+    test(id) {
+      if(id === 2) {
+        this.$store.getters['averagePerDate'];
+      }
+    }
+  }
 };
 </script>
 

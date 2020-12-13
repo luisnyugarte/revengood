@@ -36,30 +36,31 @@
   </v-row> 
      <v-row> 
         <v-col
-        cols="12"
-        sm="12"
+        cols="10"
+        sm="10"
       >
-        <table class="table table-hover">
+      <h2>Sugerencias</h2>
+      <table class="table table-hover">
           <thead>
             <tr>
               <th scope="col">Fechas</th>
-              <th scope="col"
-                v-for="(item, index) in headers"
-                :key="index">
-                {{ item.name }}
-              </th>
+                <th scope="col"
+                  v-for="(i, index) in headers" :key="index">
+                  {{ i }}
+                </th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item, idx) in dataTable" :key="idx">
-              <td>{{ item.date }}</td>
-              <td
-                @mouseover="predictionHint = idx"
-                @mouseleave="predictionHint = null">
-                <p :class="getColor(item.hotel)">
-                  $ {{ item.hotel }}
+            <!-- eslint-disable-next-line vue/no-template-key -->
+              <tr v-for="(item, index) in dataTable" :key="index"> 
+                <td> {{item.date}}</td>
+                <td v-for="(i, idx) in item.prices" :key="idx">
+                <p :class="idx === 0 ? getColor(item.hotel) : 'normal'"
+                  @mouseover="predictionHint = idx"
+                  @mouseleave="predictionHint = null">
+                  $ {{i.price}}
                 </p>
-                <span class="predictionHint" v-show="predictionHint === idx">
+                <span class="predictionHint" v-show="idx === 0 && predictionHint === idx">
                   <ul>
                     <li class="title">Puntuación: <strong>4.5</strong></li>
                     <li>200</li>
@@ -67,11 +68,30 @@
                     <li>400</li>
                   </ul>
                 </span>
-              </td>
-              <td>$ {{ item.hotel1 }}</td>
-              <td>$ {{ item.hotel2 }}</td>
-              <td>$ {{ item.hotel3 }}</td>
-              <td>$ {{ item.hotel4 }}</td>
+                </td>
+              </tr>
+          </tbody>
+        </table>
+      </v-col>
+       <v-col
+        cols="2"
+        sm="2"
+      >
+        <h2>Hotel referencia</h2>
+         <table class="table table-hover" style="text-align: right;">
+          <thead>
+            <tr>
+              <th scope="col"> 
+                <p v-if="referenceHotel !== ''">
+                  {{referenceHotel}}
+                </p>
+                <p v-else>No ha seleccionado un hotel referencia</p>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, idx) in priceFromReference" :key="idx">
+              <td>{{item.toFixed()}}</td>
             </tr>
           </tbody>
         </table>
@@ -80,6 +100,7 @@
    </v-container>
 </template>
 <script>
+import { mapState } from 'vuex';
   export default {
     name: 'Dashboard',
     data () {
@@ -87,72 +108,169 @@
         predictionHint: null,
         color: '',
         headers: [
-          {
-            name: 'Your hotel',
-            value: 1,
-          },
-          {
-            name: 'Hotel 1',
-            value: 2,
-          },
-          {
-            name: 'Hotel 2',
-            value: 3,
-          },
-          {
-            name: 'Hotel 3',
-            value: 4,
-          },
-          {
-            name: 'Hotel 4',
-            value: 5,
-          }
+          'your hotel',
+          'Hotel 1',
+          'Hotel 2',
+          'Hotel 3',
+          'Hotel 4',
+          'Otto Hotel suites',
+          'City Express'
         ],
         dataTable: [
           {
+            id: 1,
+            date: '01/12/2020',
+            prices: [
+              {
+                hotel: 'Your hotel',
+                price: 220
+              },
+              {
+                hotel: 'Hotel 1',
+                price: 200
+              },
+              {
+                hotel: 'Hotel 2',
+                price: 205
+              },
+              {
+                hotel: 'Hotel 3',
+                price: 234
+              },
+              {
+                hotel: 'Hotel 4',
+                price: 222
+              },
+              {
+                hotel: 'Otto Hotel suites',
+                price: 213
+              },
+              {
+                hotel: 'City Express',
+                price: 213
+              },
+            ]
+          },
+          {
+            id: 2,
+            date: '02/12/2020',
+            prices: [
+              {
+                hotel: 'Your hotel',
+                price: 220
+              },
+              {
+                hotel: 'Hotel 1',
+                price: 200
+              },
+              {
+                hotel: 'Hotel 2',
+                price: 205
+              },
+              {
+                hotel: 'Hotel 3',
+                price: 234
+              },
+              {
+                hotel: 'Hotel 4',
+                price: 222
+              },
+              {
+                hotel: 'Otto Hotel suites',
+                price: 213
+              },
+              {
+                hotel: 'City Express',
+                price: 213
+              },
+            ]
+          },
+          {
+            id: 3,
+            date: '03/12/2020',
+            prices: [
+              {
+                hotel: 'Your hotel',
+                price: 220
+              },
+              {
+                hotel: 'Hotel 1',
+                price: 200
+              },
+              {
+                hotel: 'Hotel 2',
+                price: 205
+              },
+              {
+                hotel: 'Hotel 3',
+                price: 234
+              },
+              {
+                hotel: 'Hotel 4',
+                price: 222
+              },
+              {
+                hotel: 'Otto Hotel suites',
+                price: 213
+              },
+              {
+                hotel: 'City Express',
+                price: 213
+              },
+            ]
+          },
+        ],
+        dataTableReference: [
+          {
             date: '01/02/2020',
-            hotel: 200,
-            hotel1: 250,
-            hotel2: 300,
-            hotel3: 310,
-            hotel4: 390,
-          },
-          {
-            date: '02/02/2020',
-            hotel: 190,
-            hotel1: 200,
-            hotel2: 230,
-            hotel3: 210,
-            hotel4: 250,
-          },
-          {
-            date: '03/02/2020',
-            hotel: 210,
-            hotel1: 250,
-            hotel2: 300,
-            hotel3: 310,
-            hotel4: 390,
-          },
-          {
-            date: '04/02/2020',
-            hotel: 190,
-            hotel1: 200,
-            hotel2: 230,
-            hotel3: 210,
-            hotel4: 250,
-          },
-          {
-            date: '05/02/2020',
-            hotel: 410,
-            hotel1: 350,
-            hotel2: 300,
-            hotel3: 250,
-            hotel4: 200,
+            price: 200,
           },
         ],
         date: new Date().toISOString().substr(0, 10),
         menu: false,
       }
+    },
+    computed: {
+      ...mapState({
+        referenceHotel: 'referenceHotel',
+        iWant: 'iWant',
+        results: 'results'
+      }),
+      priceFromReference() {
+        if(this.results.length > 0 && this.referenceHotel !== '') {
+          const realPrices = [];
+          const myReference = this.results.find((hotel)=>{
+            return hotel.name.toLowerCase() === this.referenceHotel.toLowerCase();
+          });
+         this.dataTable.forEach((date)=>{
+            date.prices.forEach((i)=>{
+              if(i.hotel.toLowerCase() === myReference.name.toLowerCase()) {
+                realPrices.push(i.price)
+              }
+            });
+          });
+          if(this.iWant.toLowerCase() === 'Ser competitivo'.toLowerCase()) {
+            const priceReference = [];
+            realPrices.forEach((item) => {
+              priceReference.push(item * myReference.value)
+            });
+            return priceReference;
+          } else if(this.iWant.toLowerCase() === 'Subir ocupación'.toLowerCase()) {
+            const priceReference = [];
+            realPrices.forEach((item) => {
+              priceReference.push(item * (myReference.value - 0.04))
+            });
+            return priceReference;
+          }  else if(this.iWant.toLowerCase() === 'Optimizar TP'.toLowerCase()) {
+              const priceReference = [];
+              realPrices.forEach((item) => {
+                priceReference.push(item * (myReference.value + 0.04))
+              });
+              return priceReference;
+          }
+        }
+        return null
+      },
     },
     methods: {
       getColor (value) {
@@ -168,6 +286,27 @@
   }
 </script>
 <style lang="scss">
+  h2 {
+      white-space: nowrap;
+      font-size: 20px !important;
+      padding-bottom: 1rem;
+  }
+  .v-application {
+    .table {
+      overflow-x: auto;
+      display: block;
+      max-width: 100%;
+      th {
+        min-width: 100px;
+    vertical-align: middle; 
+        p {
+          padding: 0;
+          margin: 0;
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
   td {
     position: relative;
     p {
@@ -178,6 +317,11 @@
       border-radius: 16px;
       font-weight: bold;
       cursor: pointer;
+      &.normal {
+        color: #424242;
+        cursor: auto;
+        font-weight: 400;;
+      }
     }
     .predictionHint {
       position: absolute;

@@ -2,19 +2,19 @@
 
 <template>
   <div>
-      <div>
-    <v-alert
-      v-model="alertMax"
-      border="top"
-      type="error"
-      close-text="Cerrar"
-      dark
-      dismissible
-      transition="scale-transition"
-    >
-      Puede agregar maximo 10 hoteles.
-    </v-alert>
-  </div>
+    <div>
+      <v-alert
+        v-model="alertMax"
+        border="top"
+        type="error"
+        close-text="Cerrar"
+        dark
+        dismissible
+        transition="scale-transition"
+      >
+        Puede agregar maximo 10 hoteles.
+      </v-alert>
+    </div>
     <v-container fluid>
     <v-row> 
       <v-col
@@ -147,7 +147,7 @@
               </td>
               <td>
                 <v-autocomplete
-                  v-model="reference"
+                  v-model="referenceHotel"
                   :items="hotelsFromApi"
                   dense
                   class="select"
@@ -164,9 +164,20 @@
       </v-col>
       </v-row> 
     </v-container>
+    <footer class="footer">
+      <v-btn
+        outlined
+        absolute
+        right
+        color="orange"
+        large
+      >
+      Guardar cambios</v-btn>
+    </footer>
   </div>
 </template>
 <script>
+import { mapState } from 'vuex';
 /* eslint-disable no-debugger */
   export default {
     name: 'Admin',
@@ -231,7 +242,6 @@
         ],
         myAverageSet: 0,
         competitiveSet: 0,
-        results: [],
         alertMax: false,
         ocupations: [
           'Subir ocupación',
@@ -240,6 +250,35 @@
         ],
         addText: false,
         hintQuality: false
+      }
+    },
+    computed: {
+      ...mapState({
+        averagesAllDates: 'averagesAllDates',
+        referenceHotel: 'referenceHotel',
+        iWant: 'iWant',
+        results: 'results'
+      }),
+      referenceHotel: {
+        get() {
+          return this.$store.state.referenceHotel;
+        },
+        set(value) {
+          this.$store.commit('SET_HOTEL_REFERENCE', value);
+        },
+      },
+      iWant: {
+        get() {
+          return this.$store.state.iWant;
+        },
+        set(value) {
+          this.$store.commit('SET_I_WANT', value);
+        },
+      },
+    },
+    watch: {
+      results(value) {
+        this.$store.commit('SET_RESULTS', value);
       }
     },
     methods: {
@@ -314,5 +353,15 @@
   .table-bordered td {
     vertical-align: middle !important;
     width: 50%;
+  }
+  .footer {
+    width: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0px 0px 8px 1px #ccc;
   }
 </style>
